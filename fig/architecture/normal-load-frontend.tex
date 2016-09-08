@@ -1,0 +1,22 @@
+\begin{tikzpicture}
+\begin{axis}[
+    xlabel={Run},
+    ylabel={Reponse time in sec},
+    xmin=0, xmax=4,
+    ymin=0, ymax=0.8,
+    xtick={0, 1,2,3,4,5},
+    ytick={0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8},
+    legend pos=north east,
+    ymajorgrids=true,
+    grid style=dashed,
+]
+\addplot[
+    color=blue,
+    mark=square,
+    ]
+    coordinates {
+    (1, 0.20)(2, 0.20)(3, 0.35)
+    };
+ 
+\end{axis}
+\end{tikzpicture}

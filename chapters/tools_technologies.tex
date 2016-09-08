@@ -1,0 +1,90 @@
+% !TEX encoding = UTF-8 Unicode
+%!TEX root = thesis.tex
+% !TEX spellcheck = en-US
+%%=========================================
+\chapter{Tools and technologies}
+\label{chapterToolsTech}\label{chap:tools_technologies}
+
+This chapter describes the tools and technologies used. This includes development tools and frameworks used, like version control systems, programming languages, and third party frameworks and libraries.
+
+
+%%=========================================
+\section{Development tools}
+
+\subsection{Git}
+\label{subsection:git}
+Git was chosen for version control, with GitHub as the repository hosting service. Git was chosen as it makes it easy to manage code, and every team member had experience using it.
+
+\subsection{Go}
+The Go programming language was used for the microservice which hosts templates. Go was primarily chosen because it makes concurrent operations easy, which makes it simpler to make a high performance service \citep{whyGo}. 
+
+\subsection{Python}
+Python was used for most of the microservices, as it was the language most of the group members was experienced in. One of the main advantages with Python is that it enables quick prototyping, and at the same time tends to result in manageable and modular code. Several different Python frameworks were used for the microservices. 
+
+\paragraph{Django} web framework was used for the front-end and one of the publishing services, since it is well established with good documentation, a lot of supported packages and is actively developed. Also, some team members already had experience with it, and it seemed fairly easy to learn for those familiar with Python.
+
+\paragraph{Twisted} is an event-driven asynchronous networking engine for Python. Twisted was chosen for several of the services because it is quick to set up and configure, without a lot of web-server boilerplate \citep{twisted}.
+
+\paragraph{Entangled} is a \acrshort{dht} and tuple space based on Kademlia written in Python \citep{entangled}. The project was forked from its GitHub repository and used as a starting point for the communication back-end.
+
+\subsection{JavaScript}
+JavaScript was used for client side scripting and for the server side of one of the publishing services.
+
+\paragraph{Summernote} is a JavaScript library for creating simple \acrshort{wysiwyg} editors \citep{summernote}. It was chosen as the basis for the editor because it is not very complex, it creates a simple user interface, it is fairly easy to modify if needed, and it still covers our requirements.
+
+One of the publishing services is written in JavaScript to demonstrate that the microservices can be written in different languages and still be compatible and interchangeable with each other. JavaScript was chosen to achieve diversity without using a great deal of unfamiliar languages.
+
+\paragraph{Node.js} was used as the JavaScript runtime environment with the Express.js web framework. This was because they seemed to be the most established and documented tools for their respective tasks.
+
+\subsection{MongoDB}
+MongoDB is a document database. It was chosen for the publishing and templates services because their task is primarily to store and retrieve article and template documents, which is what a document-oriented database like MongoDB is designed for \citep{MongoDB}. MongoDB is also easy to work with, since it stores documents in a \acrshort{json}-like format, and data is usually formatted as \acrshort{json} when it is transferred between microservices. This was also a good opportunity for some group members to learn about NoSQL databases.
+
+\subsection{PostgreSQL}
+PostgreSQL is an open source database system. It was chosen for the indexing service. PostgreSQL was chosen as it provides a combination of stability and performance \citep{whyPostgres}. 
+
+\section{Deployment tools}
+The following subsections describe the tools that are in use to facilitate an easier deployment phase. All the microservices run containerised behind a reverse \acrshort{http} proxy, and all logs are shipped to a central repository. Due to the \acrshort{devops} methodology, all services are continuously deployed, and therefore continuous integration tools were required.
+
+\subsection{Docker} \label{subsec:docker}
+Docker is a tool that spawns an application in a containerised environment. It behaves much like a virtual machine, but it shares several of the base components with the host.  By doing so, Docker provides isolation between different containers, while remaining lightweight. It has a simple command line for managing containers, which makes it very easy add or remove new services, and add new instances of existing services.
+
+Virtual machines abstract away the hardware components of the host machine and emulate their own. This makes it possible to run the same system almost anywhere, with the same components -- even though the host machine is different.
+
+\subsection{Docker Compose}
+Docker Compose is a command-line interface for managing multi-container Docker applications, and makes it easy to scale and upgrade the system by providing commands for these specific actions \citep{dockerCompose}.
+
+\subsection{Nginx}
+Nginx is a an open source web server. This provides a common interface for load balancing and routing from the Internet to the different microservices.
+
+
+\subsection{Teamcity}\label{subsec:technologies-teamcity}
+TeamCity is a \acrshort{ci} system. It is provided for free and runs tests for each service upon a version control check in, giving feedback on whether tests pass. \acrshort{ci} and testing is described in chapter \ref{chap:testing}.
+
+\subsection{Jenkins}
+Jenkins is a \acrshort{ci} system, which was used to automatically deploy the services. Jenkins was chosen as it provides several plug-ins for deploying Docker containers.
+
+\subsection{Travis CI}\label{subsec:technologies-travis}
+Travis is another \acrshort{ci} system. It is distributed and runs in the cloud rather than on premise, which allows for very simple test-running for small systems. Travis was chosen for the service used to serve templates, as the service was written in Go, which is incompatible with TeamCity, as well as requiring special accessories not integrated in TeamCity by default.
+
+\subsection{Logstash}
+Since every service is run in a containerised environment, an application to centralise the log files produced by each service was needed -- otherwise the container of each service would have to be accessed to obtain the log files. Logstash was used to solve this problem. Logstash is an application which makes it easy to centralise log files produced by multiple servers and make them accessible in a shared format \citep{logstash}.
+
+\section{Testing} \label{section:tools_tech_testing}
+For testing, the libraries associated with the specific programming languages was primarily used, as specialised libraries are more flexible than forcing all tests into a specific framework. When releasing new versions of the microservices, all the tests are run using a \acrshort{ci} system. This ensures that all tests pass before the new version is actually released. Read more about testing strategies in chapter \ref{chap:testing}.
+
+\section{Project management tools}
+Seeing as git was already being used for code, all the other documents could have been synced through it as well. However, for real-time collaboration on the same files, real-time editing tools like Google Drive and ShareLaTeX were used instead.
+
+\paragraph{Google Drive} was used for all project related documents, such as plans, meeting summaries, and illustrations. Google Drive was chosen due to its real-time collaboration for creating and editing a wide variety of files, in addition to simply uploading and sharing most other file types.
+
+The reason why Google Drive was chosen, is that it has excellent integration with the Google Docs system, which makes it easy to edit and create new documents.
+
+\paragraph{ShareLaTeX} was used for easy collaboration when writing the report in LaTeX. It is also significantly more user friendly than the normal LaTeX toolchain, and allows collaborative real-time editing. The report could have been edited locally, and then synchronised using git via GitHub, but this would most likely cause many merge conflicts and would make it cumbersome to write the report. 
+
+\section{Communication tools}
+\label{sectionCommunicationTools}
+The group members, the client, and the supervisor all had very different time schedules. This necessitated some sort of asynchronous online communication platform. 
+
+\paragraph{E-Mail} was chosen as the main communication platform with both the client and the supervisor outside the meetings. E-mail enables participants to answer when they have time to spare, without having the expectation to always reply immediately that more instant messaging applications do. 
+
+\paragraph{Slack} was chosen as the main communication tool within the group. Slack allows for creating chat groups for different topics (e.g. Report writing, testing, general). A plugin for slack called Geekbot was also used. Geekbot is a stand-up bot, which each day asks all members of the team what they achieved yesterday, what they plan on doing today and what (if anything) is impeding their progress \citep{geekbot}. This requires less commitment than physical stand-up meetings, and is especially helpful when the team is not able to meet on a daily basis. 

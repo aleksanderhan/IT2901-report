@@ -1,0 +1,57 @@
+Test Scenario ID,Req Doc Reference,Test Scenario Description,Importance,No. of test cases
+TS_MA_REG_1,A-2,"It should be possible to sign up users according to
+the specified guidelines",High,-
+TS_MA_AUTH_1,A-1,Users should be able to authenticate (log in),High,-
+TS_MA_PERM_1,A-4,"Users should only be able to view content viewable
+by them according to their restrictions",Medium,-
+TS_MA_PERM_2,A-5,"It should be possible to define different levels of 
+restrictions and permission levels, such that users
+may be trusted to perform various actions based
+on the preferences of a system administrator",Medium,-
+TS_CT_CE_1,CE-1,"Users should be able to open the editor,
+create an article and save it.",High,-
+TS_CT_CE_2,CE-2,Users should be able to select a template to use.,Low,-
+TS_CT_CE_3,CE-3,"Users should be able to select an image to insert,
+and resize it.",Medium,-
+TS_CT_CE_4,CE-4,Users should be able to select a file and add it.,Medium,-
+TS_CT_CD_1,CD_2,"Users should be able to select what information to 
+publish and publish it.",Medium,-
+TS_CT_CD_2,CD_2,"Users should be able to download published 
+calendar information, and open it in google 
+calendar and Outlook.",Medium,-
+TS_CT_CA_1,CA_2,"Users should be able to add elements to menus,
+and remove them.",Medium,-
+TS_CT_CP_1,CP_1,"Users should be able to publish the content in the 
+editor.",High,-
+TS_CT_CP_2,CP_1,Users should be able to select a file and publish it.,High,-
+TS_CT_CP_3,CP_3,"Users should be able to set an expiration date for 
+published content.",Low,-
+TS_CT_CP_4,CP_3,"Content should become unavailable after its 
+expiration date.",Low,-
+TS_CT_CP_5,CP_4,"Users should be able to open metadata for a file 
+and edit it.",Low,-
+TS_CT_CP_6,CP_5,"Users should be able to chose to disable indexing 
+when publishing a file.",Low,-
+TS_CT_CP_7,CP_6,"Users should be able to inset a hyperlink in the 
+content editor.",Medium,-
+TS_CT_CP_8,CP_6,"Users should be taken to the chosen page when 
+clicking on the hyperlink made in the editor.",Medium,-
+TS_SE_SB_1,SB-1,"Users should be able to enter keywords and get 
+relevant links in return within a reasonable time 
+frame. i.e. a few seconds.",High,-
+TS_SE_SB_2,SB-2,Users should be able to edit a pages robot.txt.,Low,-
+TS_SE_SB_3,SB-3,"When searching with word stems words with 
+different suffixes should also be displayed in the 
+search result.",Low,
+TS_SE_SF_1,SF-1,"When a user enters a partially complete word, 
+frequently used words should be available for 
+autocomplete.",Medium,-
+TS_SE_SF_2,SF-2,"When a user enters text, possibly misspelled words should be marked,
+and alternatives should be offered.",Medium,-
+TS_SE_SF_3,SF-3,"When a user enters text the search front end should 
+privide autocomplete of words",Low,
+TS_CO_COM_1,COM_1,"A microservice should be able to send messages to 
+other microservices, and receive responses. 
+If not, it should receive an appropriate error.",High,-
+TS_CO_COM_2,COM_2,"A microservice should be able to request the IP of 
+another microservice when needed.",High,-

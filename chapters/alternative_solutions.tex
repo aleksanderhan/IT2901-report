@@ -1,0 +1,162 @@
+% !TEX encoding = UTF-8 Unicode
+% !TEX root = thesis.tex
+% !TEX spellcheck = en-US
+%%=========================================
+
+\chapter{Alternative solutions}
+\label{chapterAlternativeSolutions}
+
+Following the microservice architecture with loosely coupled services, there are unbounded options and combinations of solutions for the frameworks alone. Many of the technologies chosen for the final solution were based on previous experience and knowledge, and some on their compatibilities with other solutions. This chapter discusses some of the choices that were made and alternatives that were considered.
+
+%%=========================================
+\section{Technologies}
+The customer expressed a preference for microservices being implemented using a variety of technologies, so that the modularity- and separability benefits of microservices would become more apparent. Beyond that, the customer had no preferences for any specific technologies. The back-end of the search microservice was created in Python, because of familiarity with the language, as well as Python having a sizable set of libraries with the required functionalities. Python was not a necessity, however -- the team also had familiarity with Java and appropriate Java libraries -- so Java was an option as well.
+
+Searching and indexing was implemented as two separate services. 
+The main purpose of this decision was to further demonstrate the modularity of microservices; it would however be possible to replace the two services with a new conjoined service which provided both searching and indexing. An example of an alternative solution would be to use Apache Solr, which provides a superset of the functionality implemented by the current solution \citep{solr}.
+
+Similar technology decisions were applicable for the other microservices as well, enabling a mixed composition of technologies to showcase the large degree of decoupling microservices posit.
+
+\subsection{Deployment alternatives}
+How the different services are deployed is especially important when working with microservices, as one of the goals with microservices is for it to be easy to add or remove instances of a service. The following alternatives for deployment of services were considered: using a single server for all services, creating a \acrshort{vm} for each service, and creating a Docker container for each service.
+
+At first running all the services on the same server was considered. The problem with this is that the services would have been harder to distinguish, as they may run several similar processes \citep{dockerDzone}. Another problem is that this would make it relatively hard to scale to multiple servers, since all servers would need to run all services.
+
+Running all the services on the same server would also provide very little isolation between the services. Lack of isolation might cause problems when using microservices, as it is common to use many different technologies which provide some of the same functions, and this might cause the technologies to interfere with each other.
+
+Using \acrshort{vm}s for each of the services solves many of the problems above. A disadvantage with \acrshort{vm}s is that they have high overhead, as they usually run a full operating system. \acrshort{vm}s do however provide more isolation than with Docker containers or running the services directly on a server \citep{devopsDockerVSVM}, though at the cost of more overhead.
+
+Not needing quite the isolation that \acrshort{vm}s provide, Docker containers was chosen for deployment. While being more lightweight than \acrshort{vm}s, Docker also makes it easy to deploy custom, sandboxed, self-contained environments for each of the services, which means that a specific microservice can be started and stopped or replaced, without affecting other services \citep{devopsDockerVSVM}.
+
+The Docker containers are run on a Debian server. Debian was chosen for its stability and high level of documentation. Windows, Ubuntu, or Fedora were options as well, but Debian has more server related documentation, and is more minimalistic than Ubuntu \citep{whyDebian}. Each Docker container uses Alpine Linux, as this provides a minimal operating system while still providing all the services and packages required \citep{alpineLinux}.
+
+\subsection{API structure}
+Multiple services needing to communicate introduced the need for well-defined \acrshort{api}s. A service accesses the functionality of a target service through the target's \acrshort{api}. For instance, a service responsible for hosting content might require clients to have specific permissions, necessitating a service for authenticating users and proving the authentication state of users.
+
+\acrshort{rest} \acrshort{api}s exposing \acrshort{json} data was chosen as the underlying interface technology, and the \acrshort{dry}-principle for communication between the various services, although \acrshort{soap} and \acrshort{wsdl} are viable alternatives for defining and exposing the functionalities of the various services through \acrshort{xml}-formatted data rather than \acrshort{json}.
+
+
+\subsection{Service-to-service communication alternatives}\label{subsec:alternative_arch}
+The way the microservices communicate is a very important part of the microservice architecture, as it largely determines how loosely coupled the services will be \citep{pwcMicroservices}.
+
+The following three communication architectures were considered: having the services communicate directly, using a message-broker, and using a fully distributed architecture.
+Tables \ref{table:pros_cons_gateway}, \ref{table:pros_cons_broker}, and \ref{table:pros_cons_distr} summarise the pros and cons of these architectures.
+
+\begin{table}[H]
+\caption{Pros and cons of direct communication} 
+\begin{tabularx}{\linewidth}{>{\parskip1ex}X@{\kern4\tabcolsep}>{\parskip1ex}X}
+\toprule
+\hfil\bfseries Pros & \hfil\bfseries Cons\\
+\cmidrule(r{3\tabcolsep}){1-1}\cmidrule(l{-\tabcolsep}){2-2}
+
+%% PROS
+Simple\par
+Easy to scale\par
+Easy to monitor\par
+
+&
+
+%% CONS
+Potential single point of failure\par
+Requires some form of service discovery and registry\par
+
+\end{tabularx}
+\label{table:pros_cons_gateway}
+\end{table}
+
+Direct communication (illustrated in figure \ref{fig:alternativeDirectComm}) was considered early on. In the illustration, service B and C wishes to communicate with service A. For this to be possible, service B and C each need the \acrshort{ip} address of service A -- so to enable the service-to-service transmission of content.
+
+\begin{figure}[H]
+    \centering
+    \scalebox{1.4}{\input{fig/alternative-solutions/tdirectcomm}}
+    \caption{Example of communication using direct communication.}
+    \label{fig:alternativeDirectComm}
+\end{figure}
+
+The plan was to use an automated service discovery program called Registrator \citep{registrator}, along with the key/value store features of Consul \citep{consulMicroservice}. The advantage of this approach would be that to obtain the \acrshort{ip} address of a service, a service need only know how to query Consul. The role of Registrator would have been to automatically register services using Consul.
+
+However, Registrator turned out to not be as suitable as it at first seemed, since it lacked proper support for versioning of \acrshort{api}s. 
+Registrator also lacked features for making services available only after the service had actually started up -- this is important, as a service might use some time to start, during which it might not be ready to accept requests.
+
+In order to find a solution which could easily be modified to fit the needs of the system, a message-broker architecture was considered. This would solve the notification problem by having each service register itself, and periodically send heartbeat messages to the broker, to signal that the service is still online.
+A message broker architecture would also remove the need for direct communication, and instead allow the services to communicate using channels provided by the broker \citep{nginxMicroservicesMessageBroker}.
+
+\begin{table}[H]
+\caption{Pros and cons of message brokers}
+\begin{tabularx}{\linewidth}{>{\parskip1ex}X@{\kern4\tabcolsep}>{\parskip1ex}X}
+\toprule
+\hfil\bfseries Pros
+&
+\hfil\bfseries Cons\\
+\cmidrule(r{3\tabcolsep}){1-1}\cmidrule(l{-\tabcolsep}){2-2}
+
+%% PROS
+Fast\par
+The clients only need to know about the relevant channels\par
+Scales well with multiple services\par
+
+&
+
+%% CONS
+Potentially single point of failure\par
+Hard to change message format\par
+Must have relevant bindings for language used in microservice\par
+\\\\\end{tabularx}
+\label{table:pros_cons_broker}
+\end{table}
+
+Figure \ref{fig:alternativeMessageBroker} illustrates how the services would communicate with each when using a message broker. Using the message broker architecture, service B and C would send a message to the broker in order to communicate with A. The broker would function similarly to a router, since it routes messages between services.
+
+\begin{figure}[H]
+    \centering
+     %\includegraphics[scale=0.7]{fig/alternative-solutions/message-broker}
+    \scalebox{1.0}{\input{fig/alternative-solutions/tmessagebroker}}
+    \caption{Illustration of communication using a message broker.}
+    \label{fig:alternativeMessageBroker}
+\end{figure}
+
+For larger networking loads, communication using message brokers tends to be easier to scale than direct communication, by enabling asynchronous communication. This results in endpoints being able to offload the responsibility of transporting messages \citep{nginxMicroservicesMessageBroker}.
+
+This did however require writing a solution from scratch, which proved more difficult than it first seemed, particularly because large parts of the message handling had to be written from the bottom-up, 
+and none of the frameworks that were looked into, such as ZeroMQ and RabbitMQ, would allow easily creating the messaging pattern shown in figure \ref{fig:alternativeMessageBroker}.
+
+Further consideration resulted in an architecture using \acrshort{dht} to store the \acrshort{ip} addresses for each service. This is illustrated in figure \ref{fig:alternativeDHT}. In this architecture, each of the nodes in the \acrshort{dht} collectively store the \acrshort{ip} addresses associated with each service, and when a service wishes to connect to another service, it need only query the \acrshort{dht} to obtain an \acrshort{ip} address.
+
+\begin{table}[H]
+\caption{Pros and cons of a fully distributed system} 
+\begin{tabularx}{\linewidth}{>{\parskip1ex}X@{\kern4\tabcolsep}>{\parskip1ex}X}
+\toprule
+\hfil\bfseries Pros & \hfil\bfseries Cons\\
+\cmidrule(r{3\tabcolsep}){1-1}\cmidrule(l{-\tabcolsep}){2-2}
+
+%% PROS
+No single point of failure\par
+Relatively easy to query\par
+
+&
+
+%% CONS
+Complex\par 
+Takes some time before a node is marked as dead\par
+Makes changes to the communication system harder to implement.
+\\\end{tabularx}
+\label{table:pros_cons_distr}
+\end{table}
+
+This alternative eliminates the single point of failure, and each of the nodes used to store information in the network can easily be replaced without bringing down the entire network.
+Cursory research did not result in finding any other microservice projects having used this approach, making it an interesting solution to explore.
+
+Figure \ref{fig:alternativeDHT} illustrates how the \acrshort{dht} architecture works. Service B and C first need to request the \acrshort{ip} address to an instance of service A, and then communicate directly with service A using the received \acrshort{ip} address.
+
+\begin{figure}[H]
+    \centering
+    \scalebox{1.1}{\input{fig/alternative-solutions/tdht}}
+    \caption{Communication between services using the \acrshort{dht} architecture.}
+    \label{fig:alternativeDHT}
+\end{figure}
+
+
+\section{Development method alternatives}
+A spiral model based development method was chosen (as explained in section \ref{section:devProcess}). Alternatives like Scrum, Kanban and Waterfall were discussed, though all fell a bit short. The requirements were likely to change, and services were likely be added or removed, so following a waterfall method was considered unpractical. This is because Waterfall requires a lot of planning early in the project, when in the case of this project all the information needed was not yet available.
+
+A solution implementing Kanban or Scrum could have worked, but seeing as how much the requirements and functionality was changing, having a strict backlog and organising it would require much effort, while giving few benefits \citep{scrumVideo}. Also many of the team members were inexperienced in using agile development or the artifacts they come with.

@@ -1,0 +1,189 @@
+% !TEX encoding = UTF-8 Unicode
+%!TEX root = thesis.tex
+% !TEX spellcheck = en-US
+%%=========================================
+\chapter{Requirements}
+\label{chapterRequirement} \label{chapter:requirements}
+
+A monolithic implementation of the system has already been developed for \acrshort{trk} by an external company. 
+The same list of requirements was provided to our group. This list was lengthy and contained several requirements not relevant for demonstrating a microservice architecture. Some of the requirements were thus selected and adjusted in cooperation with the customer, to better suit the project.
+
+The process of streamlining the list of requirements is described in detail below, but the gist of it is that the team would implement a demonstration of the microservice architecture, and to do that, required to focus on a rudimentary version of the final product, which could showcase the advantages and disadvantages of such an architecture.
+
+Throughout the development process the team met with the customer several times. Each time, a demo was showcased, and feedback was given with regards to existing functionality or desired new functionality. This added additional requirements to the initial requirements list throughout the project.
+
+\section{Selecting requirements}
+The main criteria for selecting features to implement were based on the project's goal to display advantages and disadvantages of a microservice architecture. This process removed functionality which many deem to be required. However, in an attempt to explore this architecture such functionality would not bring this thesis closer to its goal, therefore they were not prioritised. This includes functionality like deleting an article and signing out of the system. Such features are not required in order to demonstrate the microservice architecture, and are candidates for being left out in favour of features that more readily demonstrate the architecture and its potential advantages.
+ 
+In determining which microservices to implement, the requirements from the original document were used as an aid. The requirements which represented key functionality (or otherwise aided in demonstrating the microservice architecture) were aggregated. Through discussion, groups of requirements sharing similar features were chosen, and a list of microservices to implemented emerged, collectively fulfilling the chosen requirements.
+
+%The requirements from the original document were given{priorities} based on whether they represented key functionality, or aided in demonstrating the microservice architecture. This list was used in making a list of microservices to be implemented, where the microservices together fulfilled the requirements.
+%This resulted in a list of services to be implemented, and each service was assigned to the requirement it would fulfil.
+
+It was desirable to show some of the key advantages of using a microservice architecture in addition to the functional requirements. The customer suggested hot-swapping\footnote{Replace a component without shutting down the system.} of components, as this reduces downtime in a system if components need to be updated.
+
+\section{Functional Requirements} \label{sec:functionalRequirements}
+
+The requirements provided by the customer were generalised, and did not suit the development method used in the project (read more about the development method in chapter \ref{chapterProjectManagement}). Because of this, they were re-written as user stories. Since the ratio of user stories to requirements may not be one-to-one, this resulted in more user stories than requirements. This is because user stories are a bit more specialised in order to clarify and remove potential misunderstandings and incorrect assumptions.
+
+Traditionally, user stories consist of three parts: ``As a \dots'', ``I want to \dots'', and ``so that \dots''. In this project, the last part is omitted. This last part can be helpful if the motivation and use of the system is unknown to the team. However, it can also be unnecessary and thus makes the sentences more complicated and confusing than necessary \citep{userStories}.
+
+Each user story has an ID consisting of an identifier describing which service its for, followed by an integer. This makes it easy to identify which part of the system it refers to when referred to outside of the requirements table (e.g.\ git commit messages). 
+
+
+\subsection{Content related services}
+Content administration was by far the largest part of the project. The main purpose of content administration is to allow employees to create content and publish it on the web. Because of its size, the functionality is divided into three microservices: front-end, publishing, and templates. Their base requirements are summarised in table \ref{tab:contentReq}.
+
+\paragraph{Front-end}
+The front-end service is responsible for making the system accessible to users over the web. This includes rendering all of the UI elements and displaying appropriate content to the user. 
+It should also contain an editor that enables employees to create and upload documents. 
+Since it will be used by people with various backgrounds, an important aspect is for the interface to be intuitive and non-technical. For this reason, it is implemented as a \acrshort{wysiwyg}-editor. The editor should have support for templates, making it easy to create standardised content.
+
+This microservice should primarily be focused on the client side of the system. Its server side component should be as minimal as possible, to keep the back-end from becoming too monolithic. The server side component should be there to host the client side part, and to facilitate communication between the client side and other microservices.
+
+\paragraph{Publishing}
+The publishing service is responsible for making content created in the editor accessible to the other microservices. It should allow the other microservices to see what content has been published, and allow them to add or remove content. It should make it possible to set metadata about the content that is published, such as title, description and tags. It is also responsible for where and how content is stored on the back-end servers, and will be uploading the the content files to the servers.
+
+\paragraph{Template}
+The template service is responsible for making templates easily accessible to other microservices, as well as making it possible to manage different templates. These templates should for instance be used by the editor when creating new articles.
+
+\begin{table}[H]
+   \caption{User stories for the content services}
+   \centering
+   \label{tab:contentReq}
+   \begin{tabular}{|p{1.3cm}|p{9.5cm}|p{4cm}|}\hline%
+        ID & Description & Service\\\hline\hline
+        
+        CF-1 & As a user, I should be able to create articles using a \acrshort{wysiwyg} editor & Front-end \\ \hline
+        CF-2 & As a user, I should be able to add and adjust images & Front-end \\ \hline
+        CF-3 & As a user, I should be able to add videos to articles & Front-end \\ \hline
+        CF-4 & As a user, I should be able to add links to other articles and to web pages & Front-end \\ \hline
+        CF-5 & As a user, I should be able to view articles in an appropriate \acrshort{ui} & Front-end \\ \hline
+        CT-1 & As a user, I should be able to choose a template for the article & Template \\ \hline
+        CP-1 & As a user, I should be able to publish created articles & Publishing \\ \hline
+        CP-2 & As a user, I should be able to edit metadata (tags and descriptions) of documents & Publishing \\ \hline
+    \end{tabular}
+\end{table}
+
+\subsection{Authentication}
+
+The authentication service takes care of authenticating and authorising actions users wish to perform in their tasks. The exact criteria for what it should do is listed in table \ref{table:reqAuth}. Authentication is done using OAuth2, which allows for a central authentication service which handles authentication and authorisation for all the microservices, rather than an authentication service inside each microservice. 
+
+OAuth2 implements token-based authentication, where each token has a lifetime. If a token expires, the user has to re-authenticate. However, as long as the user is active on a service, the user can refresh an active token -- being given a fresh token as a result.
+
+In addition to authenticating users, the service also handles authorising users. Some of the content or some of the functions may be access-controlled; this will all be handled by the authentication service in cooperation with the services themselves.
+
+\begin{table}[H]
+   \caption{User stories for the authentication service}
+   \centering
+   \label{table:reqAuth}
+   \begin{tabular}{|p{1.3cm}|p{9.5cm}|p{4cm}|}\hline%
+        ID & Description & Service\\\hline\hline
+        
+        A-1 & As a user, I want to be able to log in & Auth \\ \hline
+        A-2 & As an administrator, I want to be allowed to create users & Auth \\ \hline
+        A-3 & As an administrator, I want to be allowed to create content & Auth \\ \hline
+        A-4 & The system should allow for different access levels & Auth \\ \hline
+    \end{tabular}
+\end{table}
+
+\subsection{Search related services}
+A single search service which handles all of its functionality could have been implemented, without the service getting too large. As a proof of concept, however, and trying different granularities, the service was split into three services. How the user stories were split amongst them is shown in table \ref{table:reqSearch}.
+
+\paragraph{Index}
+The index service extracts and stores keywords from published documents, and returns lists of document identifiers as a response to queries for keywords. 
+
+\paragraph{Spell checking}
+The spelling service is responsible for providing feedback on query words. It supports correction and completion. Completion returns a list of words which start with the query, correction returns a list of words within a two character edit distance of the query.
+
+\paragraph{Search}
+The search service accepts queries, consults the index service for documents matching keywords in the query, and returns a revised list of documents to the user along with spelling feedback, courtesy of the spelling service.
+
+\begin{table}[H]
+   \caption{User stories for the search, index, and spelling services}
+   \centering
+   \label{table:reqSearch}
+   \begin{tabular}{|p{1.3cm}|p{9.5cm}|p{4cm}|}\hline%
+        ID & Description & Service\\\hline\hline
+        SE-1 & As a user, I should be able to quickly search for documents & Search \\ \hline
+        %SI-2 & As a user, I want to get results based on an enhanced and refined query, using stemming and other search enhancements & Index \\ \hline
+        SP-1 & As a user, I want suggestions to completion of search terms & Spelling \\ \hline
+        SP-2 & As a user, I want feedback on misspelled words & Spelling \\ \hline
+        SP-3 & As a user, I want autocompletion of words & Spelling \\ \hline
+    \end{tabular}
+\end{table}
+
+
+\subsection{Service-to-service communication}
+The different services communicate with each other directly by exposing a \acrshort{rest} \acrshort{api} for the others to consume. The \acrshort{ip} addresses of the services are obtained by storing them in a distributed hash table. The \acrshort{dht} is hosted by all the services. This assures that communication between services is not dependent on any single service acting like a broker.
+
+There are no user stories associated with this aspect of the system, as users are not supposed to be exposed to, or aware of such implementation details. It does however have traditional functional requirements, listed in table \ref{table:reqCom}.
+
+\begin{table}[H] 
+   \caption{Functional requirements for the communication between services}
+   \centering
+   \label{table:reqCom}
+   \begin{tabular}{|p{1.3cm}|p{9.5cm}|p{4cm}|}\hline%
+        ID & Description & Service\\\hline\hline
+        COM-1 & The services should be able to communicate with each other & Communication \\ \hline
+        COM-2 & The services should be able to easily query for the \acrshort{ip} address of a given service & Communication \\ \hline
+    \end{tabular}
+\end{table}
+
+\subsection{Status}
+To have an overview of each of the services, the customer suggested the implementing of a status service which could provide the state of each service. The team suggested that the service could provide documentation for each service as well, to collect all documentation in one place for easy access. This resulted in two additional user stories for the project, shown in table \ref{table:reqStat}.
+
+\begin{table}[H]
+    \caption{Functional requirements for the status service}
+    \centering
+    \label{table:reqStat}
+    \begin{tabular}{ | p{1.3cm} | p{9.5cm} | p{4cm} | }
+         \hline
+         ID & Description & Service \\ \hline\hline
+         
+         STA-1 & Users should be able to see if each service is available & Status \\ \hline
+         STA-2 & Users should be able to see the documentation for each service & Status \\ \hline
+    \end{tabular}
+\end{table}
+
+\section{Non-functional requirements} \label{sec:nonFunctionalRequirements}
+The non-functional requirements provided were based on the \acrshort{iso}/\acrshort{iec} 25010 standard \citep{iso25010}. This standard comprises eight characteristics, each with multiple sub-characteristics.
+
+The main focus of this project is on performance, compatibility, and maintainability, since these are key points in the demo and architecture. Reliability, security, and portability was set as desired qualities, seeing as these would be important if the system was intended for use beyond demonstration purposes. The last two, functional suitability and usability, were not included at all. This is due to their lack of importance for the demonstration.
+
+Table \ref{table:nfr} shows a list of the non-functional requirements, where as table \ref{table:nfq} shows the desired qualities. These are all derived from the \acrshort{iso}/\acrshort{iec} 25010 standard in cooperation with the customer. 
+
+\begin{table}[H] 
+   \caption{Non-functional requirements}
+   \centering
+   \begin{tabular}{|p{1.5cm}|p{9.5cm}|p{4cm}|}\hline%
+        ID & Description & Key attribute\\\hline\hline
+        NFR-1 & The system should respond within 500ms under normal load (~50 req/s) & Performance \\ \hline
+        NFR-2 & The system should be able to handle minimum 750 simultaneous users & Performance \\ \hline
+        NFR-3 & It should be easy to add new instances of a service & Scalability \\ \hline
+        NFR-4 & Services should not have any performance impact on any other services, even when sharing environment & Scalability \\     \hline
+        NFR-5 & The system should divide load between all instances of the services & Scalability \\     \hline
+        NFR-6 & All services should communicate through \acrshort{rest} & Modularity \\ \hline
+        NFR-7 & The system should have a minimum of 80\% test coverage, to lower the chances of introducing defects or reducing the product quality & Maintainability \label{nfr:7} \\ \hline
+        NFR-8 & The architecture of the system should be well-documented & Documentation \\ \hline
+        NFR-9 & Use of architectural and design patterns should be documented & Documentation \\ \hline
+    \end{tabular}
+   \label{table:nfr}
+\end{table}
+
+The non-functional requirements mentioned above were created by the customer or by doing some simple research. I.e. NFR-1 was influenced by \citep{webResponseTime} and NFR-2 was introduced by the customer. NFR-3, NFR-4 and NFR-5 were introduced by the microservice architecture, and NFR-6, NFR-7 and NFR-8 were added by the team to supplement the architectural requirements. NFR-9 and NFR-10 were added for documentation and also maintainability purposes.
+
+\begin{table}[H] 
+   \caption{Desired Non-functional qualities}
+   \centering
+   \begin{tabular}{|p{1.5cm}|p{9.5cm}|p{4cm}|}\hline%
+        ID & Description & Key attribute\\\hline\hline
+        NFR-10 & The system should handle software faults without going down & Reliability \\ \hline
+        NFR-11 & The system should have a secure authentication system & Security \\ \hline
+        NFR-12 & All services should be easy to install and uninstall & Portability \\ \hline
+        NFR-13 & All services should be easily replaceable with software of similar functionality & Portability \\ \hline
+    \end{tabular}
+   \label{table:nfq}
+\end{table}
+
+These desired non-functional requirements were requirements which would be ``nice to have'', but not required, due to the exploration part of the project. I.e.\ NFR-10 would be required in a production environment, but for demonstration purposes it should be acceptable to experience some software bugs, as long as the main functionality works as it should. The same applies to NFR-11; a secure authentication system would be required in production, but not all services require this kind of security for exploration purposes. NFR-12 and NFR-13 are connected to the architectural choice.

@@ -1,0 +1,15 @@
+  \begin{sequencediagram}
+  \newthread{A}{Client}{}
+    \newinst[2.5]{B}{Resource Owner}{}
+    \newinst[1]{C}{Authorisation Server}{}
+    \newinst[1]{D}{Resource Server}{}
+    \begin{call}{A}{(A) Authorisation Request}{B}{(B) Authorisation Grant}
+      \postlevel
+    \end{call}
+    \begin{call}{A}{(C) Authorisation Grant}{C}{(D) Access Token}
+      \postlevel
+    \end{call}
+    \begin{call}{A}{(E) Access Token}{D}{(F) Protected Resource}
+      \postlevel
+    \end{call}
+  \end{sequencediagram}

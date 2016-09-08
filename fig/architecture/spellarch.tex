@@ -1,0 +1,37 @@
+%\documentclass{standalone}
+%\usepackage[utf8]{inputenc}
+%\usepackage{tikz}
+%\usepackage{tikz-qtree}
+%\usepackage{enumitem}
+%\usepackage{pdfpages}
+%\usepackage{amsmath}
+%\usepackage{graphicx}
+%\usepackage{tikz}
+%\usepackage{pgf}
+%\usepackage{pgf-umlsd}
+
+%\usetikzlibrary{arrows,positioning,calc,shapes,fit}
+
+%\begin{document}
+  \begin{sequencediagram}
+  \newthread{A}{Search front-end}{}
+    \newinst[2]{AA}{Search back-end}{}
+    \newinst[2]{B}{Spelling service}{}
+    \newinst{C}{Index service}{}
+    \begin{call}{A}{Search(query)}{AA}{\{results:[...], spell:[[...], ...]\}}
+      \begin{sdblock}{Loop}{Foreach keyword}
+        \begin{call}{AA}{matches()}{C}{[r1, r2, ..., rn]}
+        \end{call}
+      \end{sdblock}
+      \begin{sdblock}{Loop}{Foreach keyword}
+        \begin{call}{AA}{correction()}{B}{[c1, c2, ..., cn]}
+          \begin{sdblock}{Condition}{if uncached}
+            \begin{call}{B}{frequencies()}{C}{\{...\}}
+            \end{call}
+          \end{sdblock}
+        \end{call}
+      \end{sdblock}
+    \end{call}
+    
+  \end{sequencediagram}
+%\end{document}

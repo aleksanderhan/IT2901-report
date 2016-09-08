@@ -1,0 +1,86 @@
+% !TEX encoding = UTF-8 Unicode
+%!TEX root = thesis.tex
+% !TEX spellcheck = en-US
+%%=========================================
+
+\chapter{Setup guide}
+\section*{Initial requirements}
+\begin{itemize}
+    \item A server running Debian (Jessie or newer) with more than 2GB of RAM and 10GB of free space. The server should also have git installed.
+    \item A domain pointing to the server mentioned above.
+    \item SSL/TLS certificates for the domain mentioned above SSL/TLS is not required, but it is recommend as you would otherwise have to change some of the services.
+    \footnote{Certificates can be obtained for free by following: \url{https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-14-04}}
+    \item Prior experience with Linux and the command line.
+\end{itemize}
+
+\section*{Step 1 - Installing the required software}
+Begin by installing docker, docker-compose and nginx, which is required to run the system..
+If the server is running Debian Jessie, you must first add the Debian Stretch package repository, as Nginx 1.10 or newer is required.
+\clearpage % As the command below would otherwise be split between two pages and a footnote(!).
+The Stretch package repository can be used by adding:
+\begin{verbatim}
+    deb http://http.debian.org/debian stretch main
+\end{verbatim}
+to /etc/apt/sources.list, and then running:
+\begin{verbatim}
+    apt-get update
+\end{verbatim}
+in order to obtain the packages from the newly added repository.
+Nginx is then installed by running:
+\begin{verbatim}
+    apt-get -t stretch install nginx-extras
+\end{verbatim}
+or just
+\begin{verbatim}
+    apt-get install nginx-extras
+\end{verbatim}
+if you are running a newer version than Jessie.
+
+After having installed Nginx, follow:
+\begin{itemize}
+    \item \url{https://docs.docker.com/engine/installation/linux/debian/}
+    \item \url{https://docs.docker.com/compose/install/}
+    \item \url{https://github.com/jwilder/docker-gen}
+\end{itemize}
+to install docker, docker-compose and docker-gen.
+
+
+\section*{Step 2 - Adding configuration files}
+Begin by running:
+\begin{verbatim}
+    git clone https://github.com/microserv/deploy
+\end{verbatim}
+to obtain the configuration files needed to deploy the system.
+
+Now enter the newly created \textit{deploy} folder, and replace all references to \textit{despina.128.no} with your own domain name.
+This can also be done by executing the following command:
+\begin{verbatim}
+    find . -type f -exec sed -i 's/despina.128.no/<YOUR DOMAIN HERE>/g' {} +
+\end{verbatim}
+Then, copy the docker-gen configuration file \textit{deploy/docker-gen/docker-gen.cfg} to \textit{/etc/} and the docker-gen systemd unit file \textit{deploy/docker-gen/docker-gen.service} to \textit{/etc/systemd/system}.
+
+After copying the files mentioned above, copy the nginx configuration file \textit{deploy/nginx/nginx.conf} to \textit{/etc/nginx/} and the nginx docker-gen template \textit{deploy/docker-gen/nginx.conf.tmpl} to \textit{/etc/nginx/}
+
+Now enable the docker-gen systemd unit file by running:
+\begin{verbatim}
+    systemctl daemon-reload
+    systemctl start docker-gen
+\end{verbatim}
+
+\section*{Step 3 - Launching the system}
+The system is launched using docker-compose. Docker-compose automatically fetches the Docker images required to launch the containers. The Docker images is by default fetched by Docker from a private repository hosted at 128.no:8080. To be able to access this repository, you must first log-in. To log-in execute:
+\begin{verbatim}
+    docker login dockerisfun:QRN5A2So
+\end{verbatim}
+
+Now enter the \textit{deploy/docker} folder, and run:
+\begin{verbatim}
+    docker-compose -d
+\end{verbatim}
+to launch the system.
+
+The system should be running and accessible through your domain after about 15 seconds. Then, access the administration panel by first accessing \textit{YOUR-DOMAIN-HERE/auth/admin} and logging in using \textit{admin} as the username, and \textit{aStupidDefaultPasswordYouShouldChange} as the password.
+
+After having logged in, go to \textit{Applications}, then \textit{Publishing}, and replace despina.128.no with your own domain in the \textit{redirect URI} field. The system should now work as intended.
+
+Kibana, elasticsearch and logstash, which is used to monitor the logs produced by the Docker containers can be launched by running the script \textit{start-docker-logging.sh} in the \textit{docker} folder. These services can be stopped by running \textit{stop-docker-logging.sh} in the same folder. When these services are up, the logs can by read by accessing \textit{YOURDOMAINNAMEHERE/kibana/}.

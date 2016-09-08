@@ -1,0 +1,22 @@
+\tikzstyle{service}=[draw, text width=5em,
+    text centered, minimum height=2.5em,
+    fill=blue!20]
+\tikzstyle{dht}=[draw, text width=2em,
+    text centered, minimum height=2.5em,
+    fill=black!10,cloud]
+
+\begin{tikzpicture}
+    \small;
+    \node[dht] (dht) {DHT};
+    \node[service] (B) [left=4cm of dht] {Service B};
+    \node[service] (C) [right=4cm of dht] {Service C};
+    \node[draw=none] (reg) at($(dht)!0.4!(B)$) {};
+    \node[service] (A) [below=2cm of reg] {Service A};
+
+    \draw[<->,thick,shorten >=0.3mm] (B) -- (dht) node[pos=0.5,above] {Get IP to service A};
+    \draw[<->,thick,shorten >=0.3mm] (C) -- (dht) node[pos=0.5,above] {Get IP to service A};
+    \draw[<->,thick] (A) -- (dht) node[pos=0.8,left] {Register as service A};
+    \draw[<->,thick] (B) -- (A.north west) node[pos=0.5,below left] {Communication};
+    \draw[<->,thick] (C) -- (A.north east) node[pos=0.5,below right] {Communication};
+
+\end{tikzpicture}

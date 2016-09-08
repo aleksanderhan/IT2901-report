@@ -1,0 +1,131 @@
+% !TEX encoding = UTF-8 Unicode
+%!TEX root = thesis.tex
+% !TEX spellcheck = en-US
+%%=========================================
+
+\chapter{Testing}
+\label{chapterTesting}\label{chap:testing}
+
+Testing is a vital part of any software product. The term ``testing'' is quite broad, as it has to do with the customer's satisfaction of the product, as well as the end users and other stakeholders. This includes automated tests like unit tests, testing non-functional requirements such as a maximum required response time from the system, and an acceptance test according to the requirements as a whole. In other words, the process of testing is to make sure that some product meets its criteria.
+
+For this project, the customer voiced opinions regarding following the \acrshort{devops} movement. Due to this, testing becomes an even more vital part, as any release of any service will be tested mostly by automated tools and can be released at any time. This requires very high code coverage so that any wrongdoings will be caught before they reach production.
+
+\section{Test strategy}
+This test strategy follows the Heuristic Test Strategy Model \citep{htsm}. This model helps designing a test strategy by defining a set of patterns to follow. Its purpose is to remind testers about what to think about while testing, while it also gives a non-technical overview in some sections. This will facilitate discussion within the group with regards to testing, to achieve better test practices and a better knowledge of what to test and how. The strategy describes the general approach to the testing process, in which it informs the team about how to approach testing with regards to customer's, environments, elements, and qualities.
+
+\subsection{Project environment}
+% THEIR???
+The customer of the project do not have any end users in mind, as it is a demonstration of an architecture. Therefore, the customer is the sole stakeholder and expectations are rather low with regards to functionality, but high in terms of technology.
+
+Previous implementations of the microservice architecture, like the one talked about in \citep{nginxMicroservices}, have been a heavy influence on this project.
+
+The services are tested by expecting them to supply output given some specific input. In a microservice architecture, it is important that the services respond to expected queries, therefore this should suffice as integration testing. Each service also has unit tests to make sure their internal logic functions correctly.
+
+\subsection{Product elements}
+
+The end product lives in containers (as described in section \ref{subsec:docker}), so the hardware of the system is well-defined and tested already. Therefore, the focus of testing the services points towards internal logic, data handling, input and output, and its interfaces. These tests also cover the operations of the product.
+
+\subsection{Quality criteria}
+
+The quality criteria being tested are the ones defined in section \ref{section:introductionCustomer} and \ref{sec:nonFunctionalRequirements}, namely performance, maintainability, modularity and scalability.
+
+Performance, modularity and scalability are important qualities for the end product with regards to how the system operates and therefore the usability for the end user. Maintainability is an important aspect of the microservice architecture and is therefore defined as a quality criteria to be tested.
+
+\subsection{Test techniques} \label{subsec:test-techniques} 
+
+The test techniques for this project can be split into automated tests and manual tests. \textit{Function} and \textit{domain} testing was done automatically (unit tests, regression tests and integration tests run by TeamCity), while \textit{flow}, \textit{stress} and \textit{user} testing was done manually during development.
+
+\paragraph{Flow testing} was done during development of each module, making sure that doing the steps in any order would produce relevant feedback, and that doing them in the correct order would produce the desired results.
+
+\paragraph{Stress testing} is described in section \ref{subsec:stress-testing}.
+
+\paragraph{User testing} was also done during development and in cooperation with the customer during demonstrations, by showing the product and allowing them to give feedback regarding functions and behaviour.
+
+% \subsection{Percieved Quality}
+% "The result of testing" - an approximation to the quality of the software product
+% Should we have this^?
+
+
+\section{Testing microservices}
+
+Since the project followed the \acrshort{devops} movement, testing became a vital part of the project. As described in section \ref{section:tools_tech_testing}, each service mostly used their own unit testing framework for testing. However, with multiple programming languages and also multiple frameworks, having a person with executive responsibility for testing was not up to par due to insufficient knowledge about the different languages. The \acrshort{cto} stepped in for some tips and tricks, but the teams mostly stuck to testing based on the requirements for the project.
+
+
+\section{Automated tests}
+
+Automated tests are tests that can be completed without any human interaction. This includes, but is not limited to, unit testing and integration testing. These are tests that execute some code and then expect some functionality by mocking a case and verifying the response.
+
+As described in subsection \ref{subsec:technologies-teamcity} and subsection \ref{subsec:technologies-travis}, the test suites for this project runs automatically on Travis CI and TeamCity upon a \acrshort{vcs} check-in. All test runs of the project are available at Travis CI\footnote{https://travis-ci.org/microserv/}.
+
+\subsection{Continuous Integration}
+
+\acrlong{ci} is the process of running automated test suites whenever a change is released, to make sure that the new change does not break existing functionality, or rather, that new features do not alter existing functionality in a way that breaks the current implementation. The word ``integration'' takes into consideration multiple modules of the system by testing their integration with each other.
+
+\subsection{Continuous Deployment}
+
+Continuous deployment is the process of deploying some system continuously, like with \acrshort{ci}, whenever a change is released. Continuous deployment requires \acrshort{ci} to make sure that the recent release passes all tests and the product can safely be released. This does not account for downtime of the end system, which might happen when releasing.
+
+\subsection{Types of tests to automate}
+\paragraph{Regression tests} are tests that should uncover problems between new code and current code. This means that if a new implementation breaks an existing test, either the new code does something unexpected to the existing code, or the new code does something \textit{expected} to existing code, but the tests are not updated to handle this.
+
+\paragraph{Code coverage} is an automated way to check how much of a code base its tests cover. Some code is \textit{covered} by tests if that code is executed during the testing process. This gives an estimation of how much of the project is covered by tests, and therefore how ``safely'' new code can be considered ready to deployment. 
+However, executing a line of code does not mean all branching factors are covered. Code coverage gives a decent estimate, but considering different possible paths of execution is important as well.
+
+
+All code coverage stats of the project is available at Coveralls\footnote{https://coveralls.io/github/microserv}.
+
+At the time of last deployment, the coverage stats for the services are as follows:
+\begin{table}[H]
+    \caption{Code coverage statistics for the various services}
+    \label{table:codecoverage}
+    \centering
+    \begin{tabular}{ | l | r | }
+        \hline
+        Service & Code Coverage \% \\ \hline
+        Frontend & 79 \% \\ \hline
+        Microauth & 74 \% \\ \hline
+        Templates & 33 \% \\ \hline
+        Search & 93 \% \\ \hline
+        Spell-check & 84 \% \\ \hline
+        \textit{Average} & \textit{73 \%} \\ \hline
+    \end{tabular}
+\end{table}
+
+Disclaimer: The \textit{average} calculation does not take into account the size of the service, it is merely a total average over all of the services.
+
+As per NFR-7 in subsection \ref{nfr:7}, the system should have a code coverage of above 80 \%. According to the numbers in table \ref{table:codecoverage}, the project does not achieve this goal. Most services are above, but some are below. This was mostly due to time limitations, in which unfamiliarity with testing and testing practices was a key problem. %practices er et substantiv her, ja?
+
+% This section has a lot of aids, i dont think it's needed. If anyone wants to rewrite it and use it
+% let's do that. ok thanks bye
+% - sklirg
+% \section{Testing of microservices}
+
+% \improvement{rewrite section}{Each of the services have unit tests and integration tests. Unit tests test each unit on its own, making sure it will provide what it is supposed to, along with regression tests for these units. The integration tests will verify that the service's \acrshort{api} will expose data in such a way that the other microservices can safely consume them without having to be updated immediately. Since it is expected for \acrshort{api} mismatches to be an issue, the \acrshort{api}s have been versioned, so that if the structure of an \acrshort{api} has to be updated, a new version can be added to the endpoints. This makes it possible to update services to use the newer version when it is appropriate for the service, rather than when the exposed \acrshort{api} is updated.}
+
+\section{Testing of third party software}
+
+A key point when choosing frameworks and libraries for the project services has been choosing recognised, well-tested and documented open source software. 
+%The \improvement{notion høres litt upassende eller merkelig ut i denne sammenhengen}{notion} of open source software is that it is well tested and documented. This has been a key point when choosing frameworks and libraries for the project services. 
+Other key points are community/general activity around the software (so that it is not outdated code no-one uses or maintains anymore), and a non-restrictive license.
+
+Since it is ascertained that the third party frameworks used are well-tested, it would be redundant to retest their behaviour in these services. Custom implementations and wrappers of the frameworks are tested, but the frameworks and their test suites are trusted to be good enough for general use in this project.
+
+\section{Testing non-functional requirements}
+
+The non-functional requirements defined in tables \ref{table:nfr} and \ref{table:nfq} have been tested by simulations described in the following paragraphs and by selecting fitting architectural patterns. By having a distributed (containerised) system, a lot of unforeseen problems can be handled -- like hardware and software/firmware failures. 
+
+\paragraph{Performance} is tested by stress-testing the system, as described in subsections \ref{subsec:stress-testing} and \ref{subsec:test-techniques}.
+
+\paragraph{Compatibility} is achieved through simple guidelines for developing in the project, namely each service exposing a \acrshort{rest} \acrshort{api}.
+
+\paragraph{Maintainability} is tested by running automated tasks for testing, readability, and code coverage -- as well as making sure that all services are documented.
+
+\section{Acceptance test} \label{section:acceptanceTest}
+
+The final release of the project will be presented for the customer 7th of June in \acrshort{trk}'s offices in Trondheim. Considering this is after the deadline of the project, the team scheduled an acceptance test of a release candidate the 28th of April. 
+
+The main focus of the project has been to explore microservices as an architecture. Therefore, the acceptance test made sure that the project complied with its requirements defined in chapter \ref{chapter:requirements}. Since the solution implemented a couple of new technologies like the OAuth2 flow (described in subsection \ref{subsec:authServiceArchitecture}), the acceptance test also introduced and questioned the flow of the system.
+
+The testing process took place at 13:30 on the 28th of April with the customer (Anvaari Mohsen) present. The acceptance test passed with no problems to mention and no changes to the code. 
+
+After the test sequence, the customer voiced interest in sketching an agenda for the demonstration and presentation of the project in their offices on 7th of June.

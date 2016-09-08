@@ -1,0 +1,5 @@
+ID,Description,Module
+COM-1,The services should be able to communicate with each other,Communcation,
+COM-2,The services should not need to know the exact hostname of the services it is communicating with,Communcation,
+COM-3,Services should be able to listen to channels,Communcation,
+COM-4,Services should be able to send messages and receive responses through channels,Communcation,

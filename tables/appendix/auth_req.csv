@@ -1,0 +1,5 @@
+ID,Description,Service
+A-1,Both admins and users should be able to log in,Auth
+A-2,Administrators should be allowed to create users,Auth
+A-3,Administrators should be able to hide and unhide content,Auth
+A-4,An admin should be able to decide which auth groups has access to the different pages,Auth

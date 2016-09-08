@@ -1,0 +1,17 @@
+ID,Description,Service
+CA-1,All content should be refered to with permalinks,Content:site-administration
+CA-2,The admin should easily be able to change menus. Both adding and removing elements,Content:site-administration
+CA-3,The system should display content based on the users role,Content:site-administration
+CD-1,The system should make information from webservices available when creating content,Content:datasets
+CD-2,The admin should be able to publish calendar information{,} downloadable for google calendar and MS,Content:datasets
+CE-1,The system should have a WYSIWYG-editor for creating and updating content,Content:editor
+CE-2,The admin should easily be able to add and adjust images,Content:editor
+CE-3,The admin should be able to add attachments to pages,Content:editor
+CE-4,An admin should be able to add embedded code to content pages,Content:editor
+CP-1,The admin should be able to publish text{,} pictures and files to webpages (homepages{,} intranett{,} Min Side),Content:publication
+CP-2,The system should structure content hierarchically,Content:publication
+CP-3,The system should allow for hiding{,} and hiding/deleting content after a timeframe,Content:publication
+CP-4,The admin should be able to edit metadata (add synonyms{,} content type{,} keywords{,} description{,} tags and change publisher{,} language etc),Content:publication
+CP-5,The admin should be able to disable indexing for specific content,Content:publication
+CP-6,The user should be able to create links to other subsites/articles etc.,Content:publication
+CP-7,The system should be able to automatically render information obtained from a rest API to an appropriate UI ,Content:publication

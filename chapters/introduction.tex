@@ -1,0 +1,31 @@
+%!TEX encoding = UTF-8 Unicode
+%!TEX root = thesis.tex
+%!TEX spellcheck = en-US
+%%=========================================
+\chapter{Introduction}
+\label{chapterIntroduction}
+
+This project is a part of IT2901 - Informatics Project II. The course aims to teach about process and organisation in software development projects. The course grants 15 credits (\acrshort{ects}) and serves as the bachelor assignment for Informatics bachelor degrees at \acrshort{ntnu}.
+
+Students partaking in the course were divided into groups and assigned an actual customer, who provided a project to be developed and documented by the students -- this report being the documentation of the development of a Content Management System using microservices made for the municipality of Trondheim.
+
+The report was written for the faculty staff and the customer. It contains some terminology assumed known to the reader. Acronyms, abbreviations, and some terms used are listed in the acronyms section.
+
+\section{Customer} \label{section:introductionCustomer}
+Trondheim Municipality, with around 13 000 employees, delivers various services to its employees and to the citizens of the municipality through construction, roads, education, health care, environment, politics, and cultural domains. An ever-growing set of these services have been and are in the process of being digitised. New services are intended to be web- and app based solutions, and to be highly integrated with each other in an attempt to reduce information redundancy and increase reusability.
+
+As an architecture principle, all new systems in \acrshort{trk} should be developed based on the \acrshort{soa}-pattern.
+However, \acrshort{soa} is in the process of changing its paradigm from a monolithic structure to a microservice structure.
+The microservice concept has, as of 2016, been the subject of numerous heavy discussions with advocates on both sides. % "both sides" as in opponent/proponent. Is this clear from the context?
+
+Microservices are however not only a theoretical concept. Oslo Municipality is one of the adopters of this concept, and has developed around 150 microservices \citep{osloMicroservices}. Trondheim Municipality is interested in seeing how a microservice oriented system functions compared to a monolithic system.
+
+\acrshort{trk}s new \acrshort{cms} ordered from an external customer will be a monolithic system. In this proof-of-concept project, there was expressed desire to see how a microservice \acrshort{cms} developed by IT2901 students would perform regarding time-to-market, performance, modularity, and scalability \citep{trkInfo}.
+
+\section{The team}
+The team consists of six students at \acrshort{ntnu}, all of whom are on their final year of a bachelor's degree in informatics. All have different knowledge and expertise within informatics due to different backgrounds and many elective courses in the degree. This results in a very broad field of knowledge, which is useful to the project and can be used to aid in internal knowledge transfers for faster learning and productivity. 
+
+
+\section{The project goal}
+The main purpose of the project is to create a working system using a microservice architecture. Due to the project being a demonstration of an architecture, it is important to prioritise displaying the benefits of the architecture, as well as revealing potential disadvantages and possible solutions and workarounds.
+As such, the \acrshort{cms} itself is not the main focus when shaping the project and when planning. The reason for choosing the \acrshort{cms} as the system to implement was to have something relatable for the employees of \acrshort{trk} when demonstrating microservices. 

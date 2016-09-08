@@ -1,0 +1,97 @@
+% !TEX encoding = UTF-8 Unicode
+%!TEX root = thesis.tex
+% !TEX spellcheck = en-US
+%%=========================================
+
+
+
+
+%% TODO give these a new id scheme since this is the same as the user stories ##########################
+%% Also fix the problem with the commas (replace commas which are in the middle of text with {,} 
+\begin{table}[p]
+   % WTF OLEX WHY IS TEHRE A CHAPTER HERE???
+   \chapter{Requirements} \label{requirements} % Should this be renamed? Best practise for appendix iiis?
+   \section{Content module}
+   \caption{Functional requirements for the content services}
+   \centering
+   \begin{tabular}{|p{1cm}|p{10cm}|p{4cm}|}\hline%
+        ID & Description & Service\\\hline\hline
+        \csvreader[late after line=\\\hline]%
+        {tables/appendix/content_req.csv}{ID=\ID, Description=\Description, Service=\Service}%
+        {\ID & \Description & \Service}%
+    \end{tabular}
+\end{table}
+
+
+\clearpage
+\section{Authentication module}
+\begin{table}[H]
+   \caption{Functional requirements for the authentication service}
+   \centering
+   \begin{tabular}{|p{1cm}|p{10cm}|p{4cm}|}\hline%
+        ID & Description & Service\\\hline\hline
+        \csvreader[late after line=\\\hline]%
+        {tables/appendix/auth_req.csv}{ID=\ID, Description=\Description, Service=\Service}%
+        {\ID & \Description & \Service}%
+    \end{tabular}
+\end{table}
+
+\section{Search module}
+\begin{table}[H]
+   \caption{Functional requirements for the search service} 
+   \centering
+   \begin{tabular}{|p{1cm}|p{10cm}|p{4cm}|}\hline%
+        ID & Description  Service\\\hline\hline
+        \csvreader[late after line=\\\hline]%
+        {tables/appendix/search_req.csv}{ID=\ID, Description=\Description, Service=\Service}%
+        {\ID & \Description & \Service}%
+    \end{tabular}
+\end{table}
+
+% This is wrong :'(
+% \section{Test plans}
+% \todo[inline]{Make subsections for each service when test plans are completed}
+
+% \subsection{All}\label{appendix:testplans}
+% Stored in Google Sheets for the time being for easy access, easy updating and referencing: \url{https://drive.google.com/open?id=1Oz8ldDk0ZnQiEJkNAxjlzAW2eUIXtuDXVDvkymlJj8c}.
+% 
+% \textit{Due to the fact that each of the services are developed by different teams, it's not possible for one of the developers to create a test plan for the system as a whole. Members of each of the sub-projects have to create plans for services when work on the service starts, and as not all services have started development, some test plans might be missing and/or incomplete.}
+% 
+% \begin{table}
+%     \caption{Test plan: Microauth}
+%     \label{table:testplan-microauth}
+%     \centering
+%     \begin{tabular}{| r | r | p{7.5cm} | c |}
+%         \hline
+%         Test Scenario ID & Req. & Description & Importance \\ \hline
+%         MA-REG-1 & A-2 & It should be possible to sign up users according to the specified guidelines & High \\ \hline
+%         MA-AUTH-1 & A-1 & Users should be able to log in & High \\ \hline
+%         MA-PERM-1 & A-4 & Users should only be able to view content viewable by them according to their restrictions & Medium \\ \hline
+%         MA-PERM-2 & A-5 & It should be possible to define different levels of restrictions and permission levels, so that users may be trusted to perform various actions based on the preferences of a system administrator & Medium \\ \hline
+%     \end{tabular}
+% \end{table}
+% 
+% \begin{table}
+%     \caption{Test plan: Content}
+%     \label{table:testplan-content}
+%     \centering
+%     \begin{tabular}{| r | r | p{9.5cm} | c |}
+%         \hline
+%         Test Scenario ID & Req. & Description & Importance \\ \hline
+%         CT-CE-1 & CE-1 & Users should be able to open the editor, create an article and save it & High \\ \hline
+%         CT-CE-2 & CE-2 & Users should be able to select a template to use. & Low \\ \hline
+%         CT-CE-3 & CE-3 & Users should be able to select an image to insert,and resize it. & Medium \\ \hline
+%         CT-CE-4 & CE-4 & Users should be able to select a file and add it. & Medium \\ \hline
+%         CT-CD-1 & CD-2 & Users should be able to select what information to publish and publish it. & Medium \\ \hline
+%         CT-CD-2 & CD-2 & Users should be able to download published calendar information, and open it in google calendar and Outlook. & Medium \\ \hline
+%         CT-CA-1 & CA-2 & Users should be able to add elements to menus,and remove them. & Medium \\ \hline
+%         CT-CP-1 & CP-1 & Users should be able to publish the content in the editor. & High \\ \hline
+%         CT-CP-2 & CP-1 & Users should be able to select a file and publish it. & High \\ \hline
+%         CT-CP-3 & CP-3 & Users should be able to set an expiration date for published content. & Low \\ \hline
+%         CT-CP-4 & CP-3 & Content should become unavailable after its expiration date. & Low \\ \hline
+%         CT-CP-5 & CP-4 & Users should be able to open metadata for a file and edit it. & Low \\ \hline
+%         CT-CP-6 & CP-5 & Users should be able to chose to disable indexing when publishing a file. & Low \\ \hline
+%         CT-CP-7 & CP-6 & Users should be able to inset a hyperlink in the content editor. & Medium \\ \hline
+%         CT-CP-8 & CP-6 & Users should be taken to the chosen page when clicking on the hyperlink made in the editor. & Medium \\ \hline
+%     \end{tabular}
+% \end{table}

@@ -1,0 +1,14 @@
+\tikzstyle{service}=[draw, text width=5em, 
+    text centered, minimum height=2.5em,
+    fill=blue!20]
+
+\begin{tikzpicture}    
+    \node[service] (A) {Service A};
+    \node[service] (B) [right=2cm of A] {Service B};
+    \coordinate (mid) at ($(A)!0.5!(B)$);
+    \node[service] (C) [below=2cm of mid] {Service C};
+    
+
+    \draw[<->,thick] (A) -- (B);
+    \draw[<->,thick] (A) -- (C);
+\end{tikzpicture}

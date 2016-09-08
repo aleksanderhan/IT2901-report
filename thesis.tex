@@ -1,0 +1,148 @@
+% !TEX encoding = UTF-8 Unicode
+% !TEX spellcheck = en-US
+%%===================================
+\documentclass[12pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage[pdftex]{graphicx}
+
+% Use newlines instead of tabs for separating paragraphs
+\usepackage{setspace}
+\doublespacing
+\usepackage[parfill]{parskip}
+
+\pdfcompresslevel=9
+
+\usepackage[toc, acronym]{glossaries}
+\makeglossaries
+\include{appendix/acronyms}
+
+\usepackage{fourier}
+\pagestyle{headings}
+\usepackage{setspace}
+\linespread{1.25}
+
+\usepackage{booktabs}
+\usepackage{url}
+\usepackage{float}
+
+\usepackage{titlesec}
+
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{svg}
+\usepackage{csvsimple}
+
+\usepackage{marvosym}
+\usepackage{rotating}
+
+\usepackage{natbib}
+%\usepackage[square]{natbib}
+%\usepackage{url}
+%\def\UrlBreaks{\do\/\do-}
+%\usepackage{breakurl}
+%\usepackage[breaklinks]{hyperref}
+
+
+\usepackage{amsmath}
+
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows,positioning,calc,shapes,fit}
+\usepackage{pgf-umlsd}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.13}
+\usepackage{xargs} % uses more than one argument in new commands
+
+
+%\usepackage[colorinlistoftodos,prependcaption]{todonotes} % Write \usepackage[disable]{todonotes} to temporarily remove all notes
+\usepackage[disable]{todonotes}
+
+\newcommandx{\unsure}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
+\newcommandx{\change}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
+\newcommandx{\info}[2][1=]{\todo[linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,#1]{#2}}
+\newcommandx{\improvement}[2][1=]{\todo[linecolor=purple,backgroundcolor=purple!25,bordercolor=purple,#1]{#2}}
+\newcommandx{\thiswillnotshow}[2][1=]{\todo[disable,#1]{#2}}
+
+
+\newenvironment{remark}{\par\mbox{}\par\noindent{\bfseries \emph{Remark}\/}:\normalfont}{\par}
+\newenvironment{defin}{\par\mbox{}\par\noindent\bfseries \emph{\Pointinghand\ }\normalfont}{\par}
+\setcounter{tocdepth}{2} 
+
+\usepackage[colorlinks=true, pdfstartview=FitV,
+linkcolor=black, citecolor=black, urlcolor=blue]{hyperref}
+\setlength{\topmargin}{-10mm}
+
+\usepackage[tableposition=top]{caption}  % Make captions be on top of tables with some vertical spacing too
+
+
+%%===================================
+\begin{document}
+\include{front} % This is the titlepage
+\newcounter{savepage}  %% Creates a counter for saving the roman page counter
+\setcounter{page}{0}
+\pagenumbering{roman}
+% \include{acknowledgment}
+% \include{summary}
+
+\include{chapters/abstract}
+
+\hypersetup{linkbordercolor=black}
+\hypersetup{linkcolor=black}
+
+
+%%=========================================
+% Table of ...
+\tableofcontents
+\addcontentsline{toc}{section}{\listfigurename}
+\listoffigures
+\addcontentsline{toc}{section}{\listtablename}
+\listoftables
+\listoftodos
+%%=========================================
+%  Acronyms   %% move this to beginning
+\printglossary[type=\acronymtype]
+\printglossary
+\clearpage
+%%=========================================
+\setcounter{savepage}{\arabic{page}}  %% Remember the roman pages before changing to arabic
+\pagenumbering{arabic}
+
+%%=========================================
+% Chapters
+\include{chapters/introduction}
+\include{chapters/requirements}
+%\include{chapters/planning}
+\include{chapters/project_management}
+\include{chapters/alternative_solutions}
+\include{chapters/tools_technologies}
+\include{chapters/architecture}
+\include{chapters/testing}
+
+\include{chapters/summary}
+
+% Include more chapters as required.
+
+%%=========================================
+%  Biblography
+\pagenumbering{roman}
+\setcounter{page}{\thesavepage}
+\bibliographystyle{apa}
+\addcontentsline{toc}{chapter}{\bibname}
+\bibliography{appendix/refs}
+
+%%=========================================
+%  Appendix
+\appendix
+\include{appendix/figures}
+\include{appendix/appendixA}
+%\include{appendix/appendixChangeLog}
+\include{appendix/setupGuide}
+\include{appendix/userManual}
+
+%%=========================================
+
+\end{document}

@@ -1,0 +1,40 @@
+\begin{tikzpicture}
+\begin{axis}[
+    xlabel={Number of instances},
+    ylabel={Reponse time in sec},
+    xmin=0, xmax=5,
+    ymin=0, ymax=6,
+    xtick={0, 1,2,3,4,5},
+    ytick={0.5, 1, 1, 2, 3, 4, 5, 6},
+    legend pos=north east,
+    ymajorgrids=true,
+    grid style=dashed,
+]
+ 
+\addplot[
+    color=blue,
+    mark=square,
+    ]
+    coordinates {
+    (1, 5.55)(2, 4.92)(3, 3.08)
+    };
+    \addlegendentry{Run 1}
+\addplot[
+    color=red,
+    mark=circle,
+    ]
+    coordinates {
+    (1, 5.30)(2, 4.54)(3, 3.09)
+    };
+    \addlegendentry{Run 2}
+\addplot[
+    color=green,
+    mark=triangle,
+    ]
+    coordinates {
+    (1, 5.42)(2, 4.12)(3, 3.16)
+    };
+    \addlegendentry{Run 3}
+ 
+\end{axis}
+\end{tikzpicture}

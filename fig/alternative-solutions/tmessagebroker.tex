@@ -1,0 +1,19 @@
+\tikzstyle{service}=[draw, text width=5em, 
+    text centered, minimum height=2.5em,
+    fill=blue!20]
+
+\tikzstyle{broker}=[draw, text width=4em, 
+    text centered, minimum height=2em,diamond,
+    fill=black!40]
+\begin{tikzpicture}    
+    
+    \node[broker] (broker) {Broker};
+    \node[service] (A) [below=of broker] {Service A};
+    \node[service] (B) [above=of broker] {Service B};
+    \node[service] (C) [right=of broker] {Service C};
+    
+
+    \draw[<->,thick] (broker) -- (A);
+    \draw[<->,thick] (broker) -- (B);
+    \draw[<->,thick] (broker) -- (C);
+\end{tikzpicture}

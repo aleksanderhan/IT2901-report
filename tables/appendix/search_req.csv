@@ -1,0 +1,8 @@
+ID,Description,Service
+SB-1,The system should provide a fast search functionality,Search:Back-end
+SB-2,Content should be indexable by external search engines{,} but an admin should be able to disable this manually,Search:Back-end
+SB-3,The system should provide search functionality like stemming and other search enhancements,Search:Back-end
+SB-4,The search engine should provide indexing of documents{,} like PDF{,} DOC{,} XLS{,} etc,Search:Back-end
+SF-1,The search engine should provide suggestions to completion of the search terms,Search:Front-end
+SF-2,The system should correct commonly misspelled words and names,Search:Front-end
+SF-3,The search engine should provide autocomplete of words,Search:Front-end

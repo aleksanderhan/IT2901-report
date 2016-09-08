@@ -1,0 +1,96 @@
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{background,main,foreground}
+
+\tikzstyle{object}=[draw, text width=5em, 
+    text centered, minimum height=2.5em]
+
+\tikzstyle{DB}=[draw, text width=2em, 
+    text centered, minimum height=2em,circle]
+%\tikzstyle{user}=[draw, text width=7em,
+%    text centered, minimum height=2em,diamond]
+\tikzstyle{user}=[draw=none]
+
+\begin{tikzpicture}    
+    %\node[user] (admin) {Administrator};
+    %\node[object] (admin_front) [below=of admin] {Admin front-end};
+    %\node[object] (admin_back) [below=of admin_front] {Admin back-end};
+    %\node[DB] (admin_db) [left=of admin_back] {DB};
+
+    %\node[object] (publish_back) [right=2cm of admin_back] {Publisher back-end};
+    \node[object] (publish_back)  {Publisher back-end};
+    %\node[object] (publish_front) [above=of publish_back] {Publisher front-end};
+    \node[DB] (publish_db) [below=of publish_back] {DB};
+
+    \node[object] (editor_back) [right=2cm of publish_back] {UI back-end};
+    \node[object] (editor_front) [above=of editor_back] {UI front-end};
+
+    \node[object] (templates) [right=2cm of editor_front] {Templates};
+    \node[DB] (templates_db) [right=of templates] {DB};
+
+    %\coordinate (mid) at ($(publish_front)!0.5!(editor_front)$);
+    %\node[user] (employee) [above=2cm of mid] {Employee};
+    \node[user] (employee) [above=of editor_front] {Employee};
+
+    %\node[object] (datasets_front) [right=1cm of employee] {Datasets front-end};
+    %\node[object] (datasets_back) [right=of datasets_front] {Datasets back-end};
+    %\node[DB] (datasets_db) [right=of datasets_back] {DB};
+
+
+    %\draw[<->,thick] (admin) -- (admin_front);
+    %\draw[<->,thick] (admin_front) -- (admin_back);
+    %\draw[<->,thick] (admin_back) -- (admin_db);
+    %\draw[<->,thick] (admin_back) -- (publish_back);
+    \draw[<->,thick] (publish_back) -- (publish_db);
+    %\draw[<->,thick] (publish_back) -- (publish_front);
+    \draw[<->,thick] (editor_back) -- (publish_back);
+    \draw[<->,thick] (editor_back) -- (editor_front);
+    \draw[<->,thick] (templates) -- (editor_front);
+    %\draw[<->,thick] (templates) -- (publish_back);
+    
+    \draw[<->,thick] (templates) -- (templates_db);
+    %\draw[<->,thick] (employee) -- (publish_front);
+    \draw[<->,thick] (employee) -- (editor_front);
+    %\draw[<->,thick] (employee) -- (datasets_front);
+    %\draw[<->,thick] (datasets_front) -- (datasets_back);
+    %\draw[<->,thick] (datasets_back) -- (datasets_db);
+
+    \def\FILL{blue!20}
+    %\def\FILL{yellow!20}
+    %\def\FILL{none}
+    \begin{pgfonlayer}{background}
+        %\path (admin_front.north -| admin_db.west)+(-0.5,0.3) node (a) {};
+        %\path (admin_db.south -| admin_back.east)+(+0.3,-0.2) node (b) {};
+        %\path[fill=\FILL, 
+        %    rounded corners, draw=black!50, dashed]
+        %    (a) rectangle (b);
+
+
+        %\path (publish_front.north -| publish_front.west)+(-0.5,0.3) node (a) {};
+        \path (publish_back.north -| publish_back.west)+(-0.5,0.3) node (a) {};
+        \path (publish_db.south -| publish_db.east)+(+0.8,-0.2) node (b) {};
+        \path[fill=\FILL,
+            rounded corners, draw=black!50, dashed]
+            (a) rectangle (b);
+
+        \path (editor_front.north -| editor_front.west)+(-0.5,0.3) node (a) {};
+        \path (editor_back.south -| editor_back.east)+(+0.3,-0.2) node (b) {};
+        \path[fill=\FILL, 
+            rounded corners, draw=black!50, dashed]
+            (a) rectangle (b);
+
+        \path (templates.north -| templates.west)+(-0.5,0.3) node (a) {};
+        \path (templates.south -| templates_db.east)+(+0.3,-0.2) node (b) {};
+        \path[fill=\FILL, 
+            rounded corners, draw=black!50, dashed]
+            (a) rectangle (b);
+
+        %\path (datasets_front.north -| datasets_front.west)+(-0.5,0.3) node (a) {};
+        %\path (datasets_front.south -| datasets_db.east)+(+0.3,-0.2) node (b) {};
+        %\path[fill=\FILL, 
+        %    rounded corners, draw=black!50, dashed]
+        %    (a) rectangle (b);
+
+
+    \end{pgfonlayer}
+\end{tikzpicture}
